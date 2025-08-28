@@ -4,43 +4,47 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+import joblib
+
 from preprocess import load_data, preprocess_data
 
-def train_model(model_name, data_path="../data/heart_dataset.csv"):
+def train_model(model_type="logistic"):
+    """Train a model and return it"""
     # Load and preprocess data
-    df = load_data(data_path)
+    df = load_data("../data/heart_dataset.csv")
     df = preprocess_data(df)
 
-    # Split into features (X) and target (y)
-    X = df.drop("target", axis=1)  # assumes "target" column is the label
-    y = df["target"]
+    # Assume last column is the target (disease/no-disease)
+    X = df.iloc[:, :-1]
+    y = df.iloc[:, -1]
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+    # Split into train/test
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Select model
-    if model_name == "logistic":
+    if model_type == "logistic":
         model = LogisticRegression(max_iter=1000)
-    elif model_name == "decision_tree":
+    elif model_type == "tree":
         model = DecisionTreeClassifier()
-    elif model_name == "random_forest":
+    elif model_type == "forest":
         model = RandomForestClassifier()
     else:
-        raise ValueError("Model not supported!")
+        raise ValueError("Invalid model type")
 
     # Train
     model.fit(X_train, y_train)
 
-    # Predict
-    y_pred = model.predict(X_test)
-
     # Evaluate
+    y_pred = model.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
-    print(f"{model_name} Accuracy: {acc:.2f}")
+    print(f"{model_type} accuracy: {acc:.2f}")
+
+    # Save model
+    joblib.dump(model, f"../results/{model_type}_model.pkl")
 
     return model
 
 if __name__ == "__main__":
-    # Example: Train logistic regression
     train_model("logistic")
+    train_model("tree")
+    train_model("forest")
