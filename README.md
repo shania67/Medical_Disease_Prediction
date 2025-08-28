@@ -55,6 +55,25 @@ The **Disease Prediction Toolkit** is an AI/ML project designed to predict disea
 
 ---
 
+## 📊 Results
+
+### Confusion Matrix
+![Confusion Matrix](results/confusion_matrix.png)
+
+### Feature Correlation
+![Feature Correlation](results/feature_correlation.png)
+
+### Feature Importance
+![Feature Importance](results/feature_importance.png)
+
+### Logistic Regression
+![Accuracy and Precision](results/logistic_regression_accuracy.png)
+
+### Heart Disease Prediction
+![Heart Disease Prediction](results/heart_disease_prediction.png)
+
+---
+
 ## 💡 Tips for Success  
 - Use **Google Colab** for free GPU access and easier setup.  
 - Refer to **scikit-learn & Kaggle tutorials** for troubleshooting.  
